@@ -1,5 +1,6 @@
 package io.cucumber;
 
+import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
@@ -8,6 +9,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -25,7 +27,7 @@ public class StepDefinitions {
     private String sauce_accesskey = System.getenv("SAUCE_ACCESS_KEY");
 
     @Before
-    public void setUp() throws MalformedURLException {
+    public void setUp(Scenario scenario) throws MalformedURLException {
         //Set up the ChromeOptions object, which will store the capabilities for the Sauce run
         ChromeOptions caps = new ChromeOptions();
         caps.setCapability("version", "latest");
@@ -38,6 +40,8 @@ public class StepDefinitions {
         sauceOptions.setCapability("username", sauce_username);
         sauceOptions.setCapability("accessKey", sauce_accesskey);
         sauceOptions.setCapability("seleniumVersion", "3.141.59");
+        sauceOptions.setCapability("name", scenario.getName());
+        sauceOptions.setCapability("build", "cucumber-demo");
 
         //Assign the Sauce Options to the base capabilities
         caps.setCapability("sauce:options", sauceOptions);
@@ -50,7 +54,9 @@ public class StepDefinitions {
     }
 
     @After
-    public void tearDown(){
+    public void tearDown(Scenario scenario){
+        String sauceResult = scenario.isFailed() ? "failed" : "passed";
+        ((JavascriptExecutor)driver).executeScript("sauce:job-result=" + sauceResult);
         driver.quit();
     }
 
