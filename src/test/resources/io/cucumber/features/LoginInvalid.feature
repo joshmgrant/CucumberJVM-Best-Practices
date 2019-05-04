@@ -1,6 +1,6 @@
-Feature: Login
+Feature: Login as Invalid User
 
-  Scenario: Login as users
+  Scenario: Login with Invalid Credentials
     Given I open chrome in Sauce Labs
     When I go to the login page
     When I enter the username "Invalid"

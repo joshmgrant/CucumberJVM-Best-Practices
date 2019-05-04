@@ -1,6 +1,6 @@
-Feature: Login
+Feature: Login as Valid User
 
-  Scenario: Login as users
+  Scenario: Standard User
     Given I open chrome in Sauce Labs
     When I go to the login page
     When I enter the username "standard_user"
