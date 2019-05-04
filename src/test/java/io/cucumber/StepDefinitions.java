@@ -1,5 +1,7 @@
 package io.cucumber;
 
+import cucumber.api.java.After;
+import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -22,8 +24,8 @@ public class StepDefinitions {
 
     private final String BASE_URL = "https://www.saucedemo.com";
 
-    @Given("I open chrome in Sauce Labs")
-    public void open_chrome_in_sauce_labs() throws MalformedURLException {
+    @Before
+    public void setUp() throws MalformedURLException {
         //Set up the ChromeOptions object, which will store the capabilities for the Sauce run
         ChromeOptions caps = new ChromeOptions();
         caps.setCapability("version", "latest");
@@ -45,12 +47,12 @@ public class StepDefinitions {
         driver = new RemoteWebDriver(new URL(SAUCE_REMOTE_URL), caps);
     }
 
-    @Then("The browser is closed")
-    public void browser_is_closed(){
+    @After
+    public void tearDown(){
         driver.quit();
     }
 
-    @When("^I go to the login page$")
+    @Given("^I go to the login page$")
     public void go_to_login_page() {
         driver.get(BASE_URL);
     }
