@@ -53,7 +53,7 @@ public class StepDefinitions {
     }
 
     @Given("^I go to the login page$")
-    public void go_to_login_page() {
+    public void goToLoginPage() {
         driver.get(BASE_URL);
     }
 
@@ -65,33 +65,33 @@ public class StepDefinitions {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        driver.findElement(By.xpath("//*[@id=\"user-name\"]")).clear();
-        driver.findElement(By.xpath("//*[@id=\"user-name\"]")).sendKeys(username);
+        driver.findElement(By.id("user-name")).clear();
+        driver.findElement(By.id("user-name")).sendKeys(username);
 
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        driver.findElement(By.xpath("//*[@id=\"password\"]")).clear();
-        driver.findElement(By.xpath("//*[@id=\"password\"]")).sendKeys(password);
+        driver.findElement(By.id("password")).clear();
+        driver.findElement(By.id("password")).sendKeys(password);
 
-        driver.findElement(By.xpath("//*[@id=\"login_button_container\"]/div/form/input[3]")).click();
+        driver.findElement(By.cssSelector(".btn_action")).click();
     }
 
     @Then("The item list is not displayed")
-    public void item_list_is_not_diplayed() {
-        Assert.assertEquals(driver.findElements(By.xpath("//*[@id=\"inventory_container\"]")).size(), 0);
+    public void itemListIsNotDisplayed() {
+        Assert.assertEquals(driver.findElements(By.id("inventory_container")).size(), 0);
     }
 
     @Then("The item list is displayed")
-    public void item_list_is_diplayed() {
-        Assert.assertTrue(driver.findElement(By.xpath("//*[@id=\"inventory_container\"]")).isDisplayed());
+    public void itemListIsDisplayed() {
+        Assert.assertTrue(driver.findElement(By.id("inventory_container")).isDisplayed());
     }
 
     @Then("^The login error is displayed$")
     public void theLoginErrorIsDisplayed() {
-        driver.findElement(By.xpath("//*[@id=\"login_button_container\"]/div/form/h3/button"));
+        driver.findElement(By.cssSelector(".error-button"));
     }
 
     @Then("^The url contains \"(\\w*)\"$")
