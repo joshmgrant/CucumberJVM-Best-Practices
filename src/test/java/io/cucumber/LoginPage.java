@@ -1,16 +1,22 @@
 package io.cucumber;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementNotVisibleException;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LoginPage {
 
     private final String BASE_URL = "https://www.saucedemo.com";
 
     private WebDriver driver;
+    private WebDriverWait wait;
 
     public LoginPage(WebDriver driver){
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, 5);
     }
 
     public void visit() {
@@ -18,19 +24,11 @@ public class LoginPage {
     }
 
     public void loginAs(String username, String password) {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("user-name")));
         driver.findElement(By.id("user-name")).clear();
         driver.findElement(By.id("user-name")).sendKeys(username);
 
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("password")));
         driver.findElement(By.id("password")).clear();
         driver.findElement(By.id("password")).sendKeys(password);
 
@@ -38,15 +36,15 @@ public class LoginPage {
     }
 
     public boolean isErrorButtonDisplayed() {
-        return driver.findElement(By.cssSelector(".error-button")).isDisplayed();
+        try {
+            return driver.findElement(By.cssSelector(".error-button")).isDisplayed();
+        }
+        catch (NoSuchElementException e){
+            return false;
+        }
     }
 
     public String getUrl() {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e){
-            e.printStackTrace();
-        }
         return driver.getCurrentUrl();
     }
 }
