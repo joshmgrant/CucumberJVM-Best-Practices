@@ -58,18 +58,8 @@ public class StepDefinitions {
     }
 
 
-    @Then("The item list is not displayed")
-    public void item_list_is_not_diplayed() {
-        Assert.assertEquals(driver.findElements(By.xpath("//*[@id=\"inventory_container\"]")).size(), 0);
-    }
-
-    @Then("The item list is displayed")
-    public void item_list_is_diplayed() {
-        Assert.assertTrue(driver.findElement(By.xpath("//*[@id=\"inventory_container\"]")).isDisplayed());
-    }
-
-    @When("^I enter the username \"(\\w*)\"$")
-    public void iEnterTheUsername(String username) {
+    @When("^I login as (\\w*) / (\\w*)$")
+    public void loginAs(String username, String password){
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
@@ -77,10 +67,6 @@ public class StepDefinitions {
         }
         driver.findElement(By.xpath("//*[@id=\"user-name\"]")).clear();
         driver.findElement(By.xpath("//*[@id=\"user-name\"]")).sendKeys(username);
-    }
-
-    @And("^I enter the password \"(\\w*)\"$")
-    public void iEnterThePassword(String password) {
 
         try {
             Thread.sleep(3000);
@@ -89,11 +75,18 @@ public class StepDefinitions {
         }
         driver.findElement(By.xpath("//*[@id=\"password\"]")).clear();
         driver.findElement(By.xpath("//*[@id=\"password\"]")).sendKeys(password);
+
+        driver.findElement(By.xpath("//*[@id=\"login_button_container\"]/div/form/input[3]")).click();
     }
 
-    @And("^I click the submit button$")
-    public void iClickTheSubmitButton() {
-        driver.findElement(By.xpath("//*[@id=\"login_button_container\"]/div/form/input[3]")).click();
+    @Then("The item list is not displayed")
+    public void item_list_is_not_diplayed() {
+        Assert.assertEquals(driver.findElements(By.xpath("//*[@id=\"inventory_container\"]")).size(), 0);
+    }
+
+    @Then("The item list is displayed")
+    public void item_list_is_diplayed() {
+        Assert.assertTrue(driver.findElement(By.xpath("//*[@id=\"inventory_container\"]")).isDisplayed());
     }
 
     @Then("^The login error is displayed$")
