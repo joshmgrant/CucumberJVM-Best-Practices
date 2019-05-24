@@ -17,6 +17,9 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class StepDefinitions {
 
@@ -25,6 +28,14 @@ public class StepDefinitions {
 
     private String sauce_username = System.getenv("SAUCE_USERNAME");
     private String sauce_accesskey = System.getenv("SAUCE_ACCESS_KEY");
+
+    private String getTimestamp() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
+
+
 
     @Before
     public void setUp(Scenario scenario) throws MalformedURLException {
@@ -41,7 +52,8 @@ public class StepDefinitions {
         sauceOptions.setCapability("accessKey", sauce_accesskey);
         sauceOptions.setCapability("seleniumVersion", "3.141.59");
         sauceOptions.setCapability("name", scenario.getName());
-        sauceOptions.setCapability("build", "cucumber-demo");
+        sauceOptions.setCapability("build", "cucumber-jvm-" + getTimestamp());
+        sauceOptions.setCapability("extendedDebugging", true);
 
         //Assign the Sauce Options to the base capabilities
         caps.setCapability("sauce:options", sauceOptions);
