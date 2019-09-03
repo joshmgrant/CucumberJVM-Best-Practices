@@ -20,11 +20,13 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class StepDefinitions {
 
     private WebDriver driver;
     private LoginPage loginPage;
+    private InventoryPage inventoryPage;
 
     private String sauce_username = System.getenv("SAUCE_USERNAME");
     private String sauce_accesskey = System.getenv("SAUCE_ACCESS_KEY");
@@ -63,6 +65,7 @@ public class StepDefinitions {
 
         driver = new RemoteWebDriver(new URL(SAUCE_REMOTE_URL), caps);
         loginPage = new LoginPage(driver);
+        inventoryPage = new InventoryPage(driver);
     }
 
     @After
@@ -77,10 +80,24 @@ public class StepDefinitions {
         loginPage.visit();
     }
 
+    @Given("^I go to the inventory page$")
+    public void goToInventoryPage() {
+        inventoryPage.visit();
+    }
 
     @When("^I login as (\\w*) / (\\w*)$")
     public void loginAs(String username, String password){
         loginPage.loginAs(username, password);
+    }
+
+    @When("^I get the first inventory item$")
+    public void getFirstInventoryItem(){
+        inventoryPage.getInventoryList();
+    }
+
+    @When("^I login with blank credentials$")
+    public void loginBlank(){
+        loginPage.loginAs("", "");
     }
 
     @Then("^The login error is displayed$")
@@ -91,5 +108,12 @@ public class StepDefinitions {
     @Then("^The url contains \"(\\w*)\"$")
     public void theUrlContains(String expectedValue) {
         Assert.assertTrue(loginPage.getUrl().contains(expectedValue));
+    }
+
+    @Then("^The inventory item is a (\\w+)$")
+    public void theFirstItemis(String expected){
+        String actual = inventoryPage.getInventoryList().get(0).getText().toLowerCase();
+
+        Assert.assertTrue(actual.contains(expected));
     }
 }
